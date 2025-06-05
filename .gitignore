@@ -1,0 +1,57 @@
+# Python related
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+*.log
+*.env
+venv/
+env/
+*.egg-info/
+*.egg
+
+# Django specific
+/staticfiles/
+staticfiles/
+media/
+*.pot
+*.mo
+
+# MySQL database files (if any local dump)
+*.sql
+
+# VSCode files
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Next.js build and node modules
+.next/
+node_modules/
+
+# Tailwind output CSS (if generated)
+dist/
+public/build/
+
+# dotenv environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# shadcn/ui generated stuff (node_modules etc)
+# (covered by node_modules/)
+
+# Logs
+logs/
+*.log
+
+# pycache
+__pycache__/
+*.py[cod]
+

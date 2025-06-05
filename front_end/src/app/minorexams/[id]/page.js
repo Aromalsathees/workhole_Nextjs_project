@@ -1,0 +1,103 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import Link from 'next/link';
+import axios from 'axios';
+
+const minorexams = () => {
+  const [query, setQuery] = useState('');
+  const router = useRouter();
+  const { id } = useParams();
+  const [popular, setPopular] = useState([]);
+  const [related, setRelated] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSearch = () => {
+    if (query.trim() !== '') {
+      router.push(`/allsearch?q=${query}`);
+    }
+  };
+
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      axios
+        .get(`http://localhost:8000/GetPopularRelatedExams/${id}`)
+        .then((response) => {
+          setPopular(response.data.popular_serializer);
+          setRelated(response.data.related_serializer);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false);
+        });
+    }
+  }, [id]);
+
+  return (
+    <div className="w-full lg:h-screen min-h-screen">
+      <h1 className="text-3xl font-bold lg:ml-150 ml-10 text-black lg:mb-8 mb-4 lg:mt-30 mt-30">Material Hub</h1>
+
+      <div className="lg:ml-150 sm:ml-60 ml-17 flex items-center bg-white lg:w-90 w-70 h-10 mt-8 rounded-lg shadow">
+        <input
+          aria-label="Search study materials"
+          className="flex-grow outline-none text-gray-700"
+          type="text"
+          placeholder="Search by subject, course, or exam"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={onKeyDown}
+        />
+        <button onClick={handleSearch}>
+          <span className="material-symbols-outlined text-gray-500 cursor-pointer ml-2 mr-2">search</span>
+        </button>
+      </div>
+
+      <h2 className="lg:ml-50 ml-35 lg:mt-15 mt-5 font-semibold">Popular Materials</h2>
+
+      {loading ? (
+        <p className="text-center mt-10">Loading materials...</p>
+      ) : (
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:mt-4 mt-8 lg:ml-50 ml-10 gap-6 lg:mr-20 mr-10">
+          {popular.map((card) => (
+            <div
+              key={card.id}
+              className="border px-4 py-2 lg:w-70 lg:h-40 h-40 rounded-lg shadow-md flex flex-col justify-between"
+            >
+              <div>
+                <p className="font-semibold">{card.name}</p>
+                <p className="text-gray-400">Note-2022</p>
+              </div>
+              <Link href={`/examsmaterials/${card.id}?model=popular`}>
+                <button className="bg-blue-300 rounded-lg text-white mt-2 w-full">Download</button>
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <h2 className="lg:ml-50 ml-35 lg:mt-15 mt-8 font-semibold">Top Rated Materials</h2>
+
+      <div className="grid lg:grid-cols-3 grid-cols-2 lg:mt-4 mt-5 lg:ml-50 ml-10 gap-6 lg:mr-20 mr-10">
+        {related.map((card) => (
+          <div key={card.id} className="border lg:px-4 lg:py-2 lg:w-70 lg:h-20 rounded-lg shadow-md">
+            <Link href={`/examsmaterials/${card.id}?model=toprelated`}>
+              <p className="font-semibold lg:mt-2 lg:ml-3 ml-2">{card.name}</p>
+              <p className="text-gray-400 ml-2">Note-2022</p>
+            </Link>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default minorexams;
