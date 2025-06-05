@@ -5,7 +5,7 @@ This is a full-stack web application built with:
 - **Backend:** Django, Django REST Framework (DRF)
 - **Frontend:** Next.js with Tailwind CSS and Shadcn UI
 - **Database:** MySQL
-- **Features:** Gen AI integration (specify your AI feature here)
+- **Features:** Gen AI integration (Groq API using LLaMA3)
 
 ---
 
